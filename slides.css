@@ -322,6 +322,10 @@ section .byline {
   color: #a6a6a6;
 }
 
+.byline a {
+  margin:0 1em;
+}
+
 section .byline::before, section .byline::after {
   content: "";
   display: block;
