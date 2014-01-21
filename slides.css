@@ -323,7 +323,7 @@ section .byline {
 }
 
 .byline a {
-  margin:0 4em;
+  margin:0 1em;
 }
 
 section .byline::before, section .byline::after {
