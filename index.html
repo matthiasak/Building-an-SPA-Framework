@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Build a Rudimentary 3D Engine with SVG</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="font.css">
+    <link rel="stylesheet" href="slides.css">
+</head>
+
+<body>
+    <article>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy">This talk is called:</div>
+                </div>
+                <h1>Building your own <strong>Single Page App</strong> Framework</h1>
+                <div class="byline">
+                    <div class="classy">with this guy:</div>
+                </div>
+                <div class="me"></div>
+                <div class="byline"><a target="_blank" href="http://mkeas.org/">http://mkeas.org</a><a target="_blank" href="https://twitter.com/matthiasak">@matthiasak</a><a target="_blank" href="http://github.com/matthiasak">matthiasak</a>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy">I am an author:</div>
+                </div>
+                <h1>Wrinklefree
+                    <strong>jQuery and HTML5</strong>
+                </h1>
+                <div class="byline">
+                    <div class="classy">and</div>
+                </div>
+                <h1>Wrinklefree
+                    <strong>JS for Hipsters</strong>
+                </h1>
+                <div class="byline">on Leanpub (<a target="_blank" href="https://leanpub.com/u/matthiasak">https://leanpub.com/u/matthiasak</a>)</div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy">Firstly:</div>
+                </div>
+                <h1>A confession</h1>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h1>I did not intend to make my own framework.</h1>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy">When I built</div>
+                </div>
+                <h1> my site, I <strong>intended to use a framework</strong>.</h1>
+                <div class="byline">
+                    <div class="classy">But...</div>
+                </div>
+                <h1>
+                    <strong>it was far easier, I found,</strong>
+                </h1>
+                <div class="byline">
+                    <div class="classy">to throw away large, complex frameworks for something I could customize.</div>
+                </div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h1>What's the first "framework" most JavaScript developers learn, anyway?</h1>
+                <pre style="display: inline-block;">
+$(function(){
+    var $link = $('.zelda').data('destiny');
+    $('body').html($link);
+});
+                </pre>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy large">Why jQuery?</div>
+                </div>
+                <ul>
+                    <li>Widely supported and very portable</li>
+                    <li>DOM abstraction and querying</li>
+                    <li>Considered a "God Framework"</li>
+                </ul>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy large">But it wasn't what I needed.</div>
+                </div>
+                <p>
+                    People normally start learning jQuery when they start learning JavaScript...
+                </p>
+                <div class="byline">
+                    <div class="classy large">which is actually not what we should start with.</div>
+                </div>
+                <h3>(<a target="_blank" href="https://gist.github.com/harmstyler/7468978">clicky</a>)</h3>
+            </div>
+        </section>
+
+        <section data-bespoke-state="kick-spider">
+            <div class="content">
+                <div class="byline">
+                    <div class="classy large">jQuery is my favorite framework / library</div>
+                </div>
+                <h2>but it can be wasteful with browser and CPU resources.</h2>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy">By now, you have heard of some of these...</div>
+                </div>
+                <h2>Frameworks</h2>
+                <ul>
+                    <li>JavaScriptMVC</li>
+                    <li>Backbone</li>
+                    <li>Backbone Marionette</li>
+                    <li>jQuery.MVC</li>
+                    <li>Angular</li>
+                    <li>Flight</li>
+                    <li>React</li>
+                    <li>Knockout</li>
+                    <li>Ember</li>
+                    <li>CanJS</li>
+                </ul>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy large">Can we really practice excellence and mastery of our craft if we have to constantly keep up with the latest framework?</div>
+                </div>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="bomb">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Let's give ourselves a clean slate.</h2>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy large">What are the common features that popular frameworks provide?</div>
+                </div>
+                <ul>
+                    <li>Templating</li>
+                    <li>Routing</li>
+                    <li>Animation</li>
+                    <li>DOM events</li>
+                    <li>Resource loading and dependency injection</li>
+                    <li>Keyboard interaction</li>
+                    <li>Event management</li>
+                    <li>Mediator and PubSub patterns</li>
+                    <li>HTML5 History and pushState APIs</li>
+                    <li>Async flow control</li>
+                    <li>Promises</li>
+                    <li>AJAX and XMLHttpRequests</li>
+                    <li>Sub-navigation</li>
+                    <li>Mobile friendly touch event optimizations</li>
+                    <li>Markdown parsing</li>
+                    <li>View management and transitions</li>
+                </ul>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="start-screen-ocarina"></section>
+
+        <section data-bespoke-state="enter-the-dungeon">
+            <div class="content">
+                <h2>The JS Framework:</h2>
+                <div class="byline">
+                    <div class="classy large">An ominous dungeon.</div>
+                </div>
+                <h3>But it doesn't have to be!</h3>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy large">THE BIG 3</div>
+                </div>
+                <ul>
+                    <li>Promises</li>
+                    <li>Routing</li>
+                    <li>Pubsub</li>
+                </ul>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="triforce">
+            <div class="content">
+                <div class="byline">
+                    <div class="classy large">The Triforce</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h2>This talk is now:</h2>
+                <div class="byline">
+                    <div class="classy">Triforcing</div>
+                </div>
+                <h2>your JavaScript, <strong>your way</strong>,</h2>
+                <div class="byline">
+                    <div class="classy">with micro-libraries,</div>
+                </div>
+                <h2>
+                    opinionated workflows
+                </h2>
+                <div class="byline">
+                    <div class="classy">&amp; intermittent</div>
+                </div>
+                <h2>
+                    <strong>awesome Zelda gifs.</strong>
+                </h2>
+            </div>
+        </section>
+
+        <section data-bespoke-state="kill-navi">
+            <h2>I get really exhausted by all the noise these frameworks make.</h2>
+        </section>
+
+        <section>
+            <div class="content">
+                <h2>"The top 1% succeed despite how they train, not because of it. A danger of hero-worship."</h2>
+                <div class="byline">
+                    <div class="classy">-- Tim Ferriss</div>
+                </div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="copy">
+            <div class="content">
+                <h2>Most frameworks rely on 90% of the same <strong>stuff</strong></h2>
+                <div class="unbrokenline"></div>
+                <h2>Copycats, if you will.</h2>
+            </div>
+        </section>
+
+        <section data-bespoke-state="sword-in-stone">
+            <div class="content">
+                <h3>So,</h3>
+                <div class="unbrokenline"></div>
+                <h2>Let's introduce my favorite piece of theory for tonight</h2>
+                <div class="unbrokenline"></div>
+                <h2><strong>The Single Responsibility Principle</strong></h2>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Focused and minimal JavaScript micro-libraries</h2>
+                <h2 class="byline"> that perform a small set of features </h2>
+                <h2>typically perform the best. <strong>period</strong>.</h2>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h3>Mediocre software <strong>&lt;</strong> Awesome experiences</h3>
+                <div class="unbrokenline"></div>
+                <h2>I'd rather build one <strong>superb</strong> app over five <em>crappy</em> ones.</h2>
+            </div>
+        </section>
+
+        <section data-bespoke-state="triforce2">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h3>The Triforce</h3>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h3>Routing</h3>
+                <p><a target="_blank" href="http://microjs.com/#routing">clicky.</a></p>
+                <p><a target="_blank" href="http://mtrpcic.github.io/pathjs/">another clicky.</a></p>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <pre style="display: inline-block;">
+routes = {
+    '': loadTemplate('/templates/home.html', null),
+    'articles(/:article)': loadArticles,
+    'books': loadTemplate('/templates/books.html', null, "Books"),
+    'talks': loadTalks
+}
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <pre style="display: inline-block;">
+Path.rescue(function(){
+    Path.dispatch("#/");
+});
+Path.root("#/");
+Path.listen();
+
+///....
+
+// responds to the window.onhashchange event, or optionally the HTML5 pushState API()
+                </pre>
+                <p><a target="_blank" href="https://raw.github.com/mtrpcic/pathjs/master/path.js">Path source</a></p>
+                <p><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history">HTML5 pushState()</a></p>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h3>Promises</h3>
+                <p><a target="_blank" href="http://microjs.com/#promise">clicky.</a></p>
+                <p><a target="_blank" href="https://github.com/stackp/promisejs">another clicky.</a></p>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>Most of you have seen these before:</h2>
+                <pre style="display: inline-block;">
+var result1 = $.ajax(..);
+
+result1.then(function(){
+    ...
+}).fail(function(){
+    ...
+})
+
+$.when(result1, getsSomeOtherDataInParallel()).then(function(){
+    ...
+})
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="copy">
+            <div class="content">
+                <h3>Right?</h3>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>Promises:</h2>
+                <pre style="display: inline-block;">
+function getArchive(){
+    loader.promise.get('/archive.json').then(function(error, result){
+        archive = JSON.parse(result);
+        //...
+        isArchiveReady.done();
+    });
+}
+
+/// elsewhere
+
+isArchiveReady.then(function(){
+    ...
+});
+                </pre>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h3>Pubsub</h3>
+                <p><a target="_blank" href="http://microjs.com/#pubsub">clicky.</a></p>
+                <p><a target="_blank" href="https://github.com/federico-lox/pubsub.js">another clicky.</a></p>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>PubSub, jQuery style:</h2>
+                <pre style="display: inline-block;">
+(function($) {
+
+  var o = $({});
+
+  $.subscribe = function() {
+    o.on.apply(o, arguments);
+  };
+
+  $.unsubscribe = function() {
+    o.off.apply(o, arguments);
+  };
+
+  $.publish = function() {
+    o.trigger.apply(o, arguments);
+  };
+
+}(jQuery));
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>PubSub, jQuery style:</h2>
+                <pre style="display: inline-block;">
+$.subscribe('eventName', function(eventObj, data1, data2, ...){
+    ...
+})
+
+$.publish('eventName', ['arg1', 'arg2', ...])
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>PubSub, Micro-lib style:</h2>
+                <pre style="display: inline-block;">
+var p = PubSub;
+
+var handle = p.subscribe("/some/channel", function(msg){
+    console.log(msg);
+});
+
+p.publish("/some/channel", "Hello!");
+
+p.unsubscribe(handle);
+                </pre>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="byline">
+                    <div class="classy large">Pubsub</div>
+                </div>
+                <ul>
+                    <li>Loose interface for modules</li>
+                    <li>Lower interdependency between code</li>
+                    <li>Easy to scale or create new modules</li>
+                </ul>
+                <div class="byline">
+                    <div class="classy large">Promises</div>
+                </div>
+                <ul>
+                    <li>Simplify Callback Hell</li>
+                    <li>Modularize Requests</li>
+                    <li>Plug'n'Play networking code</li>
+                </ul>
+                <div class="byline">
+                    <div class="classy large">Routing</div>
+                </div>
+                <ul>
+                    <li>Provides the glue for most MVC'ish libs</li>
+                    <li>I can haz "deep linking"?</li>
+                </ul>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>Plug'n'Play networking code?</h2>
+                <pre>
+function getPosts(){
+    var p = new Promise();
+    return p.get(...); // already formatted correctly, don't need to transform the data
+}
+
+function getTalks(){
+    var p = new Promise();
+    return p.get(...).then(function(){
+        // prep data to what 'showPage' would expect
+    });
+}
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>Plug'n'Play networking code?</h2>
+                <pre>
+function getPageData(){
+    if(posts) return getPosts()
+    else if(talks){
+        if(someTest) return getTalks().then(function(){ .. do something });
+        else return getTalks();
+    }
+}
+
+function showPage(data){
+    // manipulate HTML
+}
+
+// somewhere in the app's router code
+getPageData().then(showPage);
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="legend-of-link">
+            <div class="content">
+                <h2>Indeed, my app is now</h2>
+                <h1 class="byline"><strong>mine</strong>.</h1>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h2>Client-side Templating</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>Renders HTML</li>
+                    <li>(<a target="_blank" href="http://microjs.com/#templating">clicky</a>)</li>
+                    <li>(<a target="_blank" href="http://olado.github.io/doT/index.html">another clicky</a>)</li>
+                    <li>(<a target="_blank" href="view-source:http://mkeas.org/templates/article.html">another another clicky</a>)</li>
+                    <li>BOOM! HTML.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h2>Loader + Router + Promises + Templating</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>browser loads a tiny `index.html` (<a target="_blank" href="view-source:http://mkeas.org/#/">clicky</a>)</li>
+                    <li>loader.js kicks in, loads app.js (<a target="_blank" href="http://mkeas.org/js/app.js">clicky</a>)</li>
+                    <li>app.js loads routing, templating, etc</li>
+                    <li>app.js initializes minimum logic and data needed (<a target="_blank" href="http://mkeas.org/js/routes.js">clicky</a>)</li>
+                    <li>router figures out the path, calls the function to render that URL (<a target="_blank" href="http://microjs.com/#templating">clicky</a>) (<a target="_blank" href="http://olado.github.io/doT/index.html">another clicky</a>)</li>
+                    <li>render function creates HTML from a template and some data (<a target="_blank" href="view-source:http://mkeas.org/templates/article.html">clicky</a>)</li>
+                    <li>BOOM! HTML.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="dance-scarecrow"></section>
+
+        <section data-bespoke-state="">
+            <div class="content">
+                <h2><strong>Speed</strong> is a <em>feature</em> &amp; a <strong>requirement</strong></h2>
+                <div class="unbrokenline"></div>
+                <h3>(<a href="http://jsperf.com/dom-vs-innerhtml-based-templating/816" target="_blank">clicky</a>)</h3>
+            </div>
+        </section>
+
+        <section data-bespoke-state="dancing-link">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Users will appreciate <strong>your</strong> apps when they <strong>simply work</strong>.</h2>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Faster <strong>DOM</strong> <em>*'ing</em>.</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>Querying</li>
+                    <li>Traversing</li>
+                    <li>Manipulating</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>FastQuery</h2>
+                <ul>
+                    <li>minimal library with traversal, editing, and some utilities</li>
+                    <li>opts for native JavaScript code, and is IE8+</li>
+                    <li>provides delegated event handlers (thanks jQuery)</li>
+                    <li>DOM operation batching (<a href="https://github.com/wilsonpage/fastdom" target="_blank">clicky</a>)</li>
+                </ul>
+                <h3>(<a target="_blank" href="view-source:http://mkeas.org/js/Utilities/FastQuery.js">clicky</a>)</h3>
+            </div>
+        </section>
+
+        <section data-bespoke-state="">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Faster <strong>load</strong> <em>*'ing</em>.</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>load anything via XMLHttpRequest</li>
+                    <li>cache anything in HTML5 Local Storage (IE8+)</li>
+                    <li>granularly control the cache</li>
+                    <li>use Promises (!) to require any resources on-the-fly</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>Loader</h2>
+                <pre style="display:inline-block;">
+var js = [
+    { url: '/js/Utilities/FastQuery.js'},
+    { url: '/js/Utilities/utility-functions.js' },
+    { url: '/js/routes.js'}
+];
+
+(!window.requestAnimationFrame) && js.unshift({ url: '/js/Utilities/rAF-polyfill.js' });
+
+(!window.addEventListener) && js.unshift({ url: '/js/Utilities/addEventListener-polyfill.js' });
+
+loader.load.apply(loader, styles.concat(js)).then(function() {
+    var $ = new FastQuery();
+    Routes(window); // initializes router, starts the app.
+
+    loader.load({ url: '/js/Utilities/ga.js' }) // include Google Analytics asynchronously
+});
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Use as few resources as possible to put HTML on the screen.</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>Lazyload everything. (<a target="_blank" href="view-source:http://mkeas.org/js/routes.js">clicky</a>) (<a target="_blank" href="view-source:http://mkeas.org/js/Utilities/utility-functions.js">another clicky</a>)</li>
+                    <li><a target="_blank" href="https://github.com/hakubo/Sloth">Sloth</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="triforce">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Put it all together.</h2>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h2>Put it all together. (<a href="http://mkeas.org/#articles" target="_blank">clicky</a>)</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>index.html (<a href="view-source:http://mkeas.org/#/">clicky</a>)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>Load `loader.js`, which is then given the main app file (`app.js`)</h2>
+                <pre style="display:inline-block;">
+function downloadJSAtOnload() {
+    var element = document.createElement("script");
+    element.src = "/js/Utilities/loader.js";
+    element.id = "loaderjs";
+    element["data-app"] = "/js/app.js";
+    document.body.appendChild(element);
+}
+if (window.addEventListener)
+    window.addEventListener("load", downloadJSAtOnload, false);
+else if (window.attachEvent)
+    window.attachEvent("onload", downloadJSAtOnload);
+else window.onload = downloadJSAtOnload;
+                </pre>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h2>Put it all together. (<a href="http://mkeas.org/#articles" target="_blank">clicky</a>)</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>index.html (<a href="view-source:http://mkeas.org/#/">clicky</a>)</li>
+                    <li>loader.js (<a href="view-source:http://mkeas.org/js/Utilities/loader.js">clicky</a>)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>Loader uses Promises for async control flow.</h2>
+                <ul>
+                    <li>and custom code to cache anything in HTML5 Local Storage</li>
+                    <li>and custom code to then inject JS/CSS straight into &lt;script&gt; and &lt;style&gt; tags (e.g. sets the textContent)</li>
+                </ul>
+                <pre style="display:inline-block;">
+Loader.prototype.load = function( /* files to load */ ) {
+    var args = [].slice.call(arguments),
+        len = args.length,
+        promises = [],
+        self = this;
+
+    for(var i=0, len=args.length; i&lt;len; i++){
+        // build an array of promises
+        promises.push(function(){ return self.loadFile(file); });
+    }
+
+    // load these in parallel, execute serially, return when all done
+    return this.promise.join(promises);
+}
+                </pre>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h2>Put it all together. (<a href="http://mkeas.org/#articles" target="_blank">clicky</a>)</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>index.html (<a href="view-source:http://mkeas.org/#/">clicky</a>)</li>
+                    <li>loader.js (<a href="view-source:http://mkeas.org/js/Utilities/loader.js">clicky</a>)</li>
+                    <li>app.js (<a href="view-source:http://mkeas.org/js/app.js">clicky</a>)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>The main `app.js`</h2>
+                <pre style="display:inline-block;">
+var styles = [
+    {url: '/css/normalize.css'},
+    ...
+];
+
+var js = [
+    { url: '/js/Utilities/FastQuery.js' },
+    { url: '/js/Utilities/utility-functions.js' },
+    { url: '/js/routes.js'}
+];
+
+(!window.requestAnimationFrame) && js.unshift({ url: '/js/Utilities/rAF-polyfill.js' });
+
+(!window.addEventListener) && js.unshift({ url: '/js/Utilities/addEventListener-polyfill.js' });
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>The main `app.js`</h2>
+                <pre style="display:inline-block;">
+loader.load.apply(loader, styles.concat(js)).then(function() {
+    window.$ = new FastQuery();
+    Routes(window, undefined);
+
+    if(isiOS() || browserIs("Android")){
+        loader.load({ url: '/js/Utilities/fastclick.js' }).then(function(){
+            FastClick.attach(document.body);
+        })
+    }
+
+    loader.load({ url: '/js/Utilities/ga.js' })
+});
+                </pre>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h2>Put it all together. (<a href="http://mkeas.org/#articles" target="_blank">clicky</a>)</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>index.html (<a href="view-source:http://mkeas.org/#/">clicky</a>)</li>
+                    <li>loader.js (<a href="view-source:http://mkeas.org/js/Utilities/loader.js">clicky</a>)</li>
+                    <li>app.js (<a href="view-source:http://mkeas.org/js/app.js">clicky</a>)</li>
+                    <li>routes.js (<a href="view-source:http://mkeas.org/js/routes.js">clicky</a>)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>The routes, the <strong>Deku Seed</strong> of the logic.</h2>
+                <pre style="display:inline-block;">
+function Routes(window, undefined){
+    var   isTalksReady = new loader.promise.Promise()
+        , isArchiveReady = new loader.promise.Promise()
+        , routes = [
+            '', loadTemplate('/templates/home.html'),
+            'articles(/:article)', loadArticles,
+            'books', loadTemplate('/templates/books.html'),
+            'talks', loadTalks,
+        ];
+
+    function InitRoutes(){
+        loader.load({ url: '/js/Utilities/Path.js' }).then(function(){
+            Path.rescue(function(){
+                Path.dispatch("#/");
+            });
+            Path.root("#/");
+            Path.listen();
+        });
+    };
+
+    InitRoutes();
+}
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>The routes, the <strong>Deku Seed</strong> of the logic.</h2>
+                <pre style="display:inline-block;">
+function Routes(window, undefined){
+    function InitRoutes(){
+        loader.load({ url: '/js/Utilities/Path.js' }).then(function(){
+            ...
+            getArchive();
+            getTalks();
+        });
+    }
+
+    function getArchive(){
+        loader.promise.get('/archive.json').then(function(error, result){
+            archive = JSON.parse(result);
+            isArchiveReady.done();
+        });
+    }
+
+    function getTalks(){
+        loader.promise.get('/talks.json').then(function(error, result){
+            talks = JSON.parse(result);
+            isTalksReady.done();
+        });
+    }
+}
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>The routes, the <strong>Deku Seed</strong> of the logic.</h2>
+                <pre style="display:inline-block;">
+function loadArticles(){
+    var article;
+    if((article = this.params.article)){
+        loadArticle(article);
+        return;
+    }
+    currentRouteWrapper && $.addClass(currentRouteWrapper, "transparent");
+    isArchiveReady.then(function(){
+        loadTemplate('/templates/archive.html', archive, "Articles")();
+    });
+}
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>The routes, the <strong>Deku Seed</strong> of the logic.</h2>
+                <pre style="display:inline-block;">
+function loadTemplate(template, templateData, pageTitle){
+    return function(){
+        ...
+        currentRouteWrapper && $.addClass(currentRouteWrapper, "transparent");
+        var result;
+        if( (result = loader.get(template)) ){
+            showPage(result, templateData, pageTitle);
+        } else {
+            loader.promise.get(template).then(function(error, result){
+                loader.set(template, result);
+                showPage(result, templateData, pageTitle);
+            });
+        }
+    }
+}
+                </pre>
+            </div>
+        </section>
+
+        <section data-bespoke-state="code">
+            <div class="content">
+                <h2>The routes, the <strong>Deku Seed</strong> of the logic.</h2>
+                <pre style="display:inline-block;">
+function showPage(template, templateData, pageTitle){
+    loader.load({ url: '/js/Utilities/doT.min.js' }).then(function(){
+        var templateFn = doT.template(template)
+            , resultText = templateFn(templateData)
+            , frag = document.createDocumentFragment()
+            , tempElement = document.createElement('div');
+
+        frag.appendChild(tempElement);
+
+        $.write(function(){
+            $.body.appendChild(frag);
+            LazyLoadImages();
+            LazyLoadDisqus(templateData);
+            setTitle(pageTitle);
+            currentRouteWrapper && currentRouteWrapper.parentNode.removeChild(currentRouteWrapper);
+            currentRouteWrapper = tempElement;
+            scrollBodyTo(0, 250);
+        });
+    })
+}
+                </pre>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <h2>Put it all together. (<a href="http://mkeas.org/#articles" target="_blank">clicky</a>)</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>index.html (<a href="view-source:http://mkeas.org/#/">clicky</a>)</li>
+                    <li>loader.js (<a href="view-source:http://mkeas.org/js/Utilities/loader.js">clicky</a>)</li>
+                    <li>app.js (<a href="view-source:http://mkeas.org/js/app.js">clicky</a>)</li>
+                    <li>routes.js (<a href="view-source:http://mkeas.org/js/routes.js">clicky</a>)</li>
+                    <li>Boom, HTML!</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="fly">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Combining minimalism and a focus on speed</h2>
+                <h3 class="byline">makes apps</h3>
+                <h2><strong>fly</strong></h2>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="power">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Make your projects your own.</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>Easy to use</li>
+                    <li>No extra properties or methods</li>
+                    <li>Shouldn't present a bunch of new, crazy programming idioms</li>
+                    <li>Slightly familiar for a newcomer</li>
+                    <li>Modular, resuable pieces</li>
+                    <li>Code is succinct enough to learn</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="power">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Make your projects your own.</h2>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>Everything works exactly how I designed it to, and the bugs are easy to find.</li>
+                    <li>No mysteries, shallow stack traces.</li>
+                    <li><strong>It's fun to make a new release every week.</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="wink">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>Enjoy your work</h2>
+                <h1 class="byline">&amp</h1>
+                <h2 class="classy">look good doing it?</h2>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h3 class="classy">Backbone, Angular, and Ember may be trendy now, but not necessarily in a few years' time.</h3>
+                <h3 class="byline">Beware technology lock-in.</h3>
+                <h4>(<a target="_blank" href="http://www.google.com/trends/explore?q=angularjs%2C+ember.js%2C+backbone.js#q=angularjs%2C%20ember.js%2C%20backbone.js&cmpt=q">Ember v Backbone v Angular</a>)</h4>
+                <h4>(<a target="_blank" href="http://www.google.com/trends/explore?#q=jquery%2C%20angularjs&cmpt=q">jQuery v Angular</a>)</h4>
+            </div>
+        </section>
+
+        <section data-bespoke-state="heavy-frameworks">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h3>They are heavy, too.</h3>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="heavy-frameworks-2">
+            <div class="content">
+                <h2 class="byline">First approach</h2>
+                <ul>
+                    <li>Templating, data-binding, form validation - Backbone.js - <strong>33.9kb</strong></li>
+                    <li>Syntax highlight with support for 20+ languages- Rainbowjs - <strong>28kb</strong></li>
+                    <li>Tooltips, overlays, select boxes, tabs etc.. - Misc. tools - <strong>20kb</strong></li>
+                    <li>WebSocket communication   socket.io - <strong>40kb</strong></li>
+                    <li>Markdown parser - markdown-js - <strong>23kb</strong></li>
+                </ul>
+                <h2 class="byline">or</h2>
+                <ul>
+                    <li>Ember - <strong>240kb</strong></li>
+                </ul>
+                <h2 class="byline">or</h2>
+                <ul>
+                    <li>Everything - Wrinklefree - <strong>113kb</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="heavy-frameworks-2">
+            <div class="content">
+                <h2 class="byline">Angular</h2>
+                <ul>
+                    <li>POJOs, yay!</li>
+                    <li><strong>100kb</strong></li>
+                    <li>HUGE API (147 subsections on the documentation?)</li>
+                    <li>Proprietary nomenclature like "directives" or "filters"</li>
+                </ul>
+                <h2 class="byline">Ember</h2>
+                <ul>
+                    <li><strong>240kb</strong></li>
+                    <li>Huge API (80 different subsections under Modules > Ember? WAOW!)</li>
+                    <li>Lots of unneeded CPU costs (I need to wrap my handcrafted objects with Ember.Object causing the API to explode with new methods)</li>
+                    <li>A big framework with a lot of proprietary idioms is a risky choice. Remember <em>Enterprise Java Beans</em>?</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="heavy-frameworks-2">
+            <div class="content">
+                <h2 class="byline">Backbone</h2>
+                <ul>
+                    <li>Backbone + Underscore - <strong>33.9kb</strong> minified</li>
+                    <li>"backbone way" of structuring code ain't my style, yo.</li>
+                    <li>Too much boilerplate.</li>
+                    <li>Again, Backbone.Model.extend instead of POJOs.</li>
+                    <li>Doing real-time, or connecting to old REST, SOAP, etc APIs and endpoints? Good luck with that.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="heavy-frameworks-2">
+            <div class="content">
+                <h3 class="byline classy">So</h3>
+                <h1>The Takeaways?</h1>
+                <div class="unbrokenline"></div>
+                <ul>
+                    <li>Native JS APIs are easier than you think</li>
+                    <li>All frameworks share common features, and aren't that magical</li>
+                    <li>Minimalism and modularism is beautiful</li>
+                    <li>Speed should be a requirement, not just a feature</li>
+                    <li><a target="_blank" href="http://microjs.com">MicroJS rocks</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-bespoke-state="headache">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>
+                    <strong>Avoid the headache.</strong>
+                </h2>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="attitude">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h2>
+                    <strong>Share some passion.</strong>
+                </h2>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+        <section data-bespoke-state="love">
+            <div class="content">
+                <div class="unbrokenline"></div>
+                <h1>
+                    <strong>Thank You!</strong>
+                </h1>
+                <div class="unbrokenline"></div>
+                <h2>Questions?</h2>
+                <div class="unbrokenline"></div>
+            </div>
+        </section>
+
+    </article>
+
+    <script src="bespoke.js"></script>
+</body>
+
+</html>
